@@ -1,0 +1,33 @@
+
+# Install dependencies on the host
+- name: Install pip
+  become: yes
+  apt: 
+    name: ['python-pip']
+    state: latest
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu"
+# sudo apt-get update: sudo apt-get install python-pip
+
+- name: Update_pip
+  become: yes
+  pip:
+    name: ['pip']
+    state: latest
+#pipi install --upgrade pip
+
+
+- name: Install openstacksdk
+  become: yes
+  pip:
+    name: ['openstacksdk']
+    state: latest
+  #pip install openstacksdk
+
+
+- name: Install docker
+  become: yes
+  pip:
+    name: ['docker']
+    state: latest
+#pip install docker
