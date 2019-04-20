@@ -1,0 +1,19 @@
+- name: Gather facts of remote host
+  setup:
+    gather_subset: all
+
+- name: Install dependencies
+  tasg: 'always'
+  become: yes
+  apt:
+    name: ['apt-tansport-https',  'curl', 'git', 'python-pip']
+    state: lates
+    install_recommends: no
+    update_cache: yes
+
+- name: Update pip 
+  tags: always
+  become: yes
+  pip: 
+    name: ['pip']
+    state: latest
