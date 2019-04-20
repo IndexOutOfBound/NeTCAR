@@ -2,9 +2,9 @@
 # Create an instance on NeCTAR
 - name: Create an instance
   os_server:
-    name: '{{ instance_name }}'
+    name: '{{ item.0.instance_name }}'
     image: '{{ instance_image }}'
-    key_name: '{{ instance_key_name }}'
+    key_name: '{{ item.0.instance_key_name }}'
     flavor: '{{ instance_flavor }}'
     availability_zone: '{{ availability_zone }}'
     security_groups: '{{ sg_names }}'
@@ -13,7 +13,10 @@
     wait: yes
     timeout: 600
     state: present
-  register: os_instance
+  with_together: 
+    - '{{ instances }}'
+    - '{{ os_vol_ids }}'
+  register: os_instances
 
 
 - debug:

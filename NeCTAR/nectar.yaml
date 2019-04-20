@@ -10,4 +10,3 @@
     - role: openstack-security-group
     - role: openstack-instance
     - role: openstack-volume-snapshot
-    - role: docker
