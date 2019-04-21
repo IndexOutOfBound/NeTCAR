@@ -2,13 +2,13 @@
 # Create an instance on NeCTAR
 - name: Create an instance
   os_server:
-    name: '{{ item.0.instance_name }}'
+    name: '{{ item.0 }}'
     image: '{{ instance_image }}'
-    key_name: '{{ item.0.instance_key_name }}'
+    key_name: '{{ instance_key_name }}'
     flavor: '{{ instance_flavor }}'
     availability_zone: '{{ availability_zone }}'
     security_groups: '{{ sg_names }}'
-    volumes: '{{ os_vol_ids }}'
+    volumes: '{{ item.1 }}'
     auto_floating_ip: yes
     wait: yes
     timeout: 600

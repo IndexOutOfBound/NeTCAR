@@ -5,7 +5,9 @@ volumes:
   - device: /dev/vdc
     mountpoint: /data
 
+    
 wp_dir: wordpress
+
 
 #Wordpress / MySQL
 

@@ -3,11 +3,11 @@
     gather_subset: all
 
 - name: Install dependencies
-  tasg: 'always'
+  tags: 'always'
   become: yes
   apt:
-    name: ['apt-tansport-https',  'curl', 'git', 'python-pip']
-    state: lates
+    name: ['apt-transport-https',  'curl', 'git', 'python-pip']
+    state: latest
     install_recommends: no
     update_cache: yes
 

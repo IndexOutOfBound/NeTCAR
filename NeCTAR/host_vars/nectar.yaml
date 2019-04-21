@@ -31,14 +31,10 @@ security_groups:
     remote_ip_prefix: 0.0.0.0/0
 
 instances:
-  - instance_name: cloud-1
-    instance_volumes: vol-clod-1
-  - instance_name: cloud-2
-    instance_volumes: vol-clod-2
-  - instance_name: cloud-3
-    instance_volumes: vol-clod-3
-  - instance_name: cloud-4
-    instance_volumes: vol-clod-4
+  - cloud-1
+  - cloud-2
+  - cloud-3
+  - cloud-4
 
 
 instance_name: cloud
