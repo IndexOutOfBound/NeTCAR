@@ -2,11 +2,30 @@
   setup:
     gather_subset: all
 
+
+#http_proxy="http://wwwproxy.unimelb.edu.au:8000"
+#https_proxy="http://wwwproxy.unimelb.edu.au:8000"
+#ftp_proxy="http://wwwproxy.unimelb.edu.au:8000"
+- name: add internet proxy
+  tags: 'always'
+  become: yes
+  lineinfile:
+    dest: /etc/environment
+    insertafter: EOF   
+    line: '{{ item }}'
+  loop: '{{ internet_proxy }}'
+
+- name: make sure the proxy setting work
+  tags: 'always'
+  become: yes
+  command: apt update
+
+
 - name: Install dependencies
   tags: 'always'
   become: yes
   apt:
-    name: ['apt-transport-https',  'curl', 'git', 'python-pip']
+    name: ['apt-transport-https',  'curl', 'git', 'python-pip', 'net-tools']
     state: latest
     install_recommends: no
     update_cache: yes

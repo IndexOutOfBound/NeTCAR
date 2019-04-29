@@ -8,7 +8,7 @@
     wait: yes
     timeout: 600
     state: present
-  loop: '{{ volumes }}'
+  loop: '{{ instances }}'
   register: os_vol
 
 # Create a list of volume Ids from the return value of os_volume

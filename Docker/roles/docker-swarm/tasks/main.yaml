@@ -1,0 +1,43 @@
+- name: check the swarm status
+  tags: 'swarm'
+  become: yes
+  shell: >
+    docker info | egrep '^Swarm: ' | cut -d ' ' -f2
+  register: swarm_status
+
+
+- debug:
+    msg: '{{ swarm_status }}'
+
+
+- name: leave the swarm if it is part of one swarm
+  tags: 'swarm'
+  become: yes
+  shell: docker swarm leave --force
+  when: "'inactive' not in swarm_status.stdout"
+
+
+
+- name: initialize swarm
+  tags: 'init'
+  become: yes
+  command: docker swarm init
+  when: " hostvars[inventory_hostname]['ansible_default_ipv4']['address'] in  groups['Manager']"
+
+
+- name: get the join token of worker
+  tags: 'init'
+  become: yes
+  command: docker swarm join-token -q worker
+  register: swarm_worker_token
+  when: " hostvars[inventory_hostname]['ansible_default_ipv4']['address'] in  groups['Manager']"
+
+
+- name: join swarm
+  become: yes
+  vars: 
+    token: "{{ hostvars[groups['Manager'][0]]['swarm_worker_token']['stdout'] }}"
+  shell: >
+      docker swarm join --token {{ token }} {{groups['Manager'][0]}}:2377
+  when: " hostvars[inventory_hostname]['ansible_default_ipv4']['address'] in  groups['Worker']"
+

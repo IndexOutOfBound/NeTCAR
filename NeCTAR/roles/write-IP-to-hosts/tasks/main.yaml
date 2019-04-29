@@ -1,0 +1,35 @@
+
+
+- name: create the hosts file
+  tags: 'IP'
+  become: yes
+  lineinfile:
+    dest: '{{ hosts_path }}'
+    line: '{{ item }}'
+    state: present
+    insertafter: EOF
+    create: true
+  loop: '{{hosts_file}}'
+
+- name: wirte the IP address of manager node into inventory file
+  tags: 'IP'
+  become: yes
+  lineinfile:
+    dest: '{{hosts_path}}'
+    line: '{{ item.server.public_v4 }}'
+    state: present
+    insertafter: '^\[Manager\]'
+  loop: '{{ os_hosts.results }}'
+  when: item.server.metadata.group == 'Manager'
+
+- name: wirte the IP address of worker node into inventory file
+  tags: 'IP'
+  become: yes
+  lineinfile:
+    dest: '{{hosts_path}}'
+    line: '{{ item.server.public_v4 }}'
+    insertafter: '^\[Worker\]'
+    state: present
+  loop: '{{ os_hosts.results }}'
+  when: item.server.metadata.group == 'Worker'
+

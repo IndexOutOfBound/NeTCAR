@@ -1,0 +1,14 @@
+
+- name: create an overlay network
+  become: yes
+  command: docker network create -d overlay couchbase
+
+
+- name: create an master node of couchbase cluster
+  become: yes
+  command: docker service create --name couchbase-master -p 8091:8091 --replicas 1 --network couchbase -e TYPE=MASTER indexoutofbound/couchbase:docker-swarm
+
+
+- name: create worker nodes of couchbase cluster
+  become: yes
+  command: docker service create --name couchbase-worker --replicas '{{worker_num}}' -e TYPE=WORKER -e COUCHBASE_MASTER=couchbase-master.couchbase --network couchbase indexoutofbound/couchbase:docker-swarm

@@ -2,18 +2,28 @@
 volumes:
   - device: /dev/vdb
     mountpoint: /var/lib/docker
-  - device: /dev/vdc
-    mountpoint: /data
-
-    
-wp_dir: wordpress
-
-
-#Wordpress / MySQL
-
 
 #Security group
-database_name: wordpress
-database_user: wordpress
-database_password: wordpress
-mysql_root_password: "P@ssw0rd"
+#database_name: wordpress
+#database_user: wordpress
+#database_password: wordpress
+#mysql_root_password: "P@ssw0rd"
+internet_proxy:
+  - http_proxy="http://wwwproxy.unimelb.edu.au:8000"
+  - https_proxy="http://wwwproxy.unimelb.edu.au:8000"
+  - ftp_proxy="http://wwwproxy.unimelb.edu.au:8000"
+
+docker_proxy_local:
+  /Users/weikai/Desktop/cloud_deploy_script/Docker/http-proxy.conf
+
+docker_proxy_remote:
+  /etc/systemd/system/docker.service.d/http-proxy.conf
+
+docker_proxy_directory:
+  /etc/systemd/system/docker.service.d
+
+token_path:
+  /Users/weikai/Desktop/cloud_deploy_script/Docker/host_vars/token.yaml
+
+
+worker_num: 3

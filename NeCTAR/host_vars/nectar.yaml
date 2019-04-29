@@ -1,43 +1,68 @@
 # common vars
 availability_zone: melbourne-qh2-uom
 
-
-
-# Volume
-volumes:
-  - vol_name: vol-cloud-1
-    vol_size: 20
-  - vol_name: vol-cloud-2
-    vol_size: 20
-  - vol_name: vol-cloud-3
-    vol_size: 20
-  - vol_name: vol-cloud-4
-    vol_size: 20
-
-
 #Security group
 security_groups:
-  - name: demo_ssh
-    description: "Demo security group for ssh access"
+  - name: ssh
+    description: "Security group for ssh access"
     protocol: tcp
     port_range_min: 22
     port_range_max: 22
     remote_ip_prefix: 0.0.0.0/0
-  - name: demo_http
-    description: "Demo security group for http access"
+  - name: http
+    description: "Security group for http access"
     protocol: tcp
     port_range_min: 80
     port_range_max: 80
     remote_ip_prefix: 0.0.0.0/0
+  - name: couchdb
+    description: "Open the port for couchdb"
+    protocol: tcp
+    port_range_min: 8091
+    port_range_max: 8091
+    remote_ip_prefix: 0.0.0.0/0
+
+#Security group for docker swarm
+security_internal:
+  name: internal
+  description: "Open the ports used for docker swarm"
+  protocol: 
+    - tcp
+    - udp
+    - icmp
+  remote_group: internal
 
 instances:
-  - cloud-1
-  - cloud-2
-  - cloud-3
-  - cloud-4
+  - name: cloud-1
+    group: Manager
+    vol_name: vol-cloud-1
+    vol_size: 60
 
+  - name: cloud-2
+    group: Worker
+    vol_name: vol-cloud-2
+    vol_size: 60
 
-instance_name: cloud
+  - name: cloud-3
+    group: Worker
+    vol_name: vol-cloud-3
+    vol_size: 60
+
+  - name: cloud-4
+    group: Worker
+    vol_name: vol-cloud-4
+    vol_size: 60
+
 instance_image: 955a0556-1224-4499-a895-87d54d5cbf32
 instance_key_name: MacPro
-instance_flavor: uom.general.2c8g
+instance_flavor: uom.mse.2c9g
+instance_network: qh2-uom-internal
+hosts_path: /Users/weikai/Desktop/cloud_deploy_script/Docker/hosts
+hosts_file:
+  - '[All:children]'
+  - Manager
+  - Worker
+  - ''
+  - '[Manager]'
+  - ''
+  - '[Worker]'
