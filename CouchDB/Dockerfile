@@ -1,6 +1,6 @@
-FROM couchbase:latest
+FROM apache/couchdb:latest
 
-copy configure-node.sh /opt/couchbase
+copy configure-node.sh /opt/couchdb
 
-CMD ["/opt/couchbase/configure-node.sh"]
+CMD ["/opt/couchdb/configure-node.sh"]
 

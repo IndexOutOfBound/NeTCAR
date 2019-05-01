@@ -1,7 +1,7 @@
 # Volume
 volumes:
   - device: /dev/vdb
-    mountpoint: /var/lib/docker
+    mountpoint: /home/ubuntu/common/data
 
 #Security group
 #database_name: wordpress
@@ -12,6 +12,7 @@ internet_proxy:
   - http_proxy="http://wwwproxy.unimelb.edu.au:8000"
   - https_proxy="http://wwwproxy.unimelb.edu.au:8000"
   - ftp_proxy="http://wwwproxy.unimelb.edu.au:8000"
+  - no_proxy="localhost,127.0.0.1,127.0.1.1,ubuntu"
 
 docker_proxy_local:
   /Users/weikai/Desktop/cloud_deploy_script/Docker/http-proxy.conf
@@ -27,3 +28,9 @@ token_path:
 
 
 worker_num: 3
+
+couchdb:
+  - user: admin
+  - pass: admin
+  - coockie: unimelb-comp90024-group-61
+  - secret: mysecret

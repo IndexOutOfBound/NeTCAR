@@ -1,0 +1,34 @@
+
+mkdir /home/ubuntu/common
+
+sudo docker run -d --name couchdb \
+  --log-opt max-size=100m \
+  --restart always \
+  -p 5984:5984 \
+  -p 5986:5986 \
+  -p 4369:4369 \
+  -p 9100-9200:9100-9200 \
+  -v /home/ubuntu/common/data:/opt/couchdb/data \
+  -e COUCHDB_USER='admin' \
+  -e COUCHDB_PASSWORD='admin' \
+  -e COUCHDB_SECRET='mysecret' \
+  -e NODENAME='172.26.37.182' \
+  couchdb \
+  -setcookie mycookie
+
+
+
+  sudo docker run -d --name couchdb \
+  --log-opt max-size=100m \
+  --restart always \
+  -p 5984:5984 \
+  -p 5986:5986 \
+  -p 4369:4369 \
+  -p 9100-9200:9100-9200 \
+  -v /home/ubuntu/common/data:/opt/couchdb/data \
+  -e COUCHDB_USER='admin' \
+  -e COUCHDB_PASSWORD='-pbkdf2-b1eb7a68b0778a529c68d30749954e9e430417fb,4da0f8f1d98ce649a9c5a3845241ae24,10' \
+  -e COUCHDB_SECRET='mysecret' \
+  -e NODENAME='172.26.37.183' \
+  couchdb \
+  -setcookie mycookie
