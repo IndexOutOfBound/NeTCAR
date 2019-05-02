@@ -18,8 +18,8 @@ security_groups:
   - name: couchdb
     description: "Open the port for couchdb"
     protocol: tcp
-    port_range_min: 8091
-    port_range_max: 8091
+    port_range_min: 5984
+    port_range_max: 5984
     remote_ip_prefix: 0.0.0.0/0
 
 #Security group for docker swarm
@@ -57,7 +57,7 @@ instance_image: 955a0556-1224-4499-a895-87d54d5cbf32
 instance_key_name: MacPro
 instance_flavor: uom.mse.2c9g
 instance_network: qh2-uom-internal
-hosts_path: /Users/weikai/Desktop/cloud_deploy_script/Docker/hosts
+hosts_path: /etc/ansible/hosts
 hosts_file:
   - '[All:children]'
   - Manager

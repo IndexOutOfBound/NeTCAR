@@ -1,14 +1,78 @@
 
-- name: create an overlay network
+- name: create the file used for couchdb
   become: yes
-  command: docker network create -d overlay couchbase
+  shell: mkdir -p /var/lib/docker/couchdb-data
+  
 
+- name: test
+  set_fact:
+    current_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}"
+  
 
-- name: create an master node of couchbase cluster
+- name: run the container of couchdb
   become: yes
-  command: docker service create --name couchbase-master -p 8091:8091 --replicas 1 --network couchbase -e TYPE=MASTER indexoutofbound/couchbase:docker-swarm
+  command: >
+    sudo docker run -d --name couchdb \
+    --log-opt max-size=100m \
+    --restart always \
+    -p 5984:5984 \
+    -p 5986:5986 \
+    -p 4369:4369 \
+    -p 9100-9200:9100-9200 \
+    -v /var/lib/docker/couchdb-data:/opt/couchdb/data \
+    -e COUCHDB_USER='{{ couchdb.user }}' \
+    -e COUCHDB_PASSWORD='{{ couchdb.pass }}' \
+    -e COUCHDB_SECRET='{{ couchdb.secret }}' \
+    -e NODENAME='{{ current_ip }}' \
+    couchdb \
+    -setcookie '{{ couchdb.coockie }}'
 
+- pause:
+    seconds: 1
 
-- name: create worker nodes of couchbase cluster
-  become: yes
-  command: docker service create --name couchbase-worker --replicas '{{worker_num}}' -e TYPE=WORKER -e COUCHBASE_MASTER=couchbase-master.couchbase --network couchbase indexoutofbound/couchbase:docker-swarm
+- name: create cluster 
+  command: >
+      curl -XPOST "http://{{couchdb.user}}:{{couchdb.pass}}@{{groups['Manager'][0]}}:5984/_cluster_setup" \
+      --header "Content-Type: application/json" \
+      --data "{\"action\": \"enable_cluster\", 
+               \"bind_address\":\"0.0.0.0\", 
+               \"username\": \"{{couchdb.user}}\", 
+               \"password\":\"{{couchdb.pass}}\", 
+               \"port\": \"5984\", \"remote_node\": \"{{current_ip}}\",
+               \"remote_current_user\":\"{{couchdb.user}}\", 
+               \"remote_current_password\":\"{{couchdb.pass}}\"}"
+  register: step1
+
+- debug:
+    msg: "{{step1.stdout}}"
+
+- name: add node into cluster
+  command: >
+    curl -XPOST "http://{{couchdb.user}}:{{couchdb.pass}}@{{groups['Manager'][0]}}:5984/_cluster_setup" \
+      --header "Content-Type: application/json" \
+      --data "{\"action\": \"add_node\", 
+               \"host\":\"{{current_ip}}\",
+               \"port\": \"5984\", 
+               \"username\": \"{{couchdb.user}}\", 
+               \"password\":\"{{couchdb.pass}}\"}"
+  register: step2
+
+- debug:
+    msg: "{{ step2.stdout }}"
+
+- name: finish cluster
+  shell: >
+    curl -XPOST "http://{{couchdb.user}}:{{couchdb.pass}}@{{current_ip}}:5984/_cluster_setup" \
+    --header "Content-Type: application/json" --data "{\"action\": \"finish_cluster\"}" 
+  register: finish
+
+- debug:
+    msg: "{{ finish.stdout}}"
+
+- name: test the stat of cluster
+  shell: >
+    curl -X GET "http://{{couchdb.user}}:{{couchdb.pass}}@{{current_ip}}:5984/_membership"
+  register: cluster
+
+- debug:
+    msg: "{{ cluster.stdout}}"

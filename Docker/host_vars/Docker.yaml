@@ -1,7 +1,7 @@
 # Volume
 volumes:
   - device: /dev/vdb
-    mountpoint: /home/ubuntu/common/data
+    mountpoint: var/lib/docker
 
 #Security group
 #database_name: wordpress
@@ -30,7 +30,7 @@ token_path:
 worker_num: 3
 
 couchdb:
-  - user: admin
-  - pass: admin
-  - coockie: unimelb-comp90024-group-61
-  - secret: mysecret
+  user: admin
+  pass: admin
+  coockie: unimelb-comp90024-group-61
+  secret: mysecret
