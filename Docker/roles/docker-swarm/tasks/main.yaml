@@ -6,9 +6,6 @@
   register: swarm_status
 
 
-- debug:
-    msg: '{{ swarm_status }}'
-
 
 - name: leave the swarm if it is part of one swarm
   tags: 'swarm'
