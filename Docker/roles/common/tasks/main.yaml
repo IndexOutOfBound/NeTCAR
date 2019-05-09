@@ -25,7 +25,7 @@
   tags: 'always'
   become: yes
   apt:
-    name: ['apt-transport-https',  'curl', 'git', 'python-pip', 'net-tools']
+    name: ['apt-transport-https',  'curl', 'git', 'python-pip', 'net-tools', 'vim']
     state: latest
     install_recommends: no
     update_cache: yes

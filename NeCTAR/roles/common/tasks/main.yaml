@@ -9,13 +9,6 @@
   when: ansible_distribution == "Ubuntu"
 # sudo apt-get update: sudo apt-get install python-pip
 
-- name: Update_pip
-  become: yes
-  pip:
-    name: ['pip']
-    state: latest
-#pipi install --upgrade pip
-
 
 - name: Install openstacksdk
   become: yes

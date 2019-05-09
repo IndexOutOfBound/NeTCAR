@@ -1,0 +1,25 @@
+- name: install required package
+  tags: 'MPI'
+  become: yes
+  apt:
+    name: ['build-essential',  'python-dev', 'python-mpi4py', 'python3-mpi4py']
+    state: latest
+    install_recommends: no
+    update_cache: yes
+
+- name: Disable Strict Host key Checking in SSH Config
+  become: yes
+  lineinfile:
+    dest: /etc/ssh/ssh_config
+    line: "StrictHostKeyChecking no"
+    insertafter: 'EOF'
+    state: present
+
+- name: Install openmpi 
+  tags: 'MPI'
+  become: yes
+  apt:
+    name: [ 'openmpi-bin', 'openmpi-doc', 'openmpi-common']
+    state: present
+
+

@@ -27,8 +27,14 @@
     couchdb \
     -setcookie '{{ couchdb.coockie }}'
 
+- debug:
+   msg: wait for 10 seconds
+
 - pause:
-    seconds: 1
+    seconds: 10
+
+- debug:
+   msg: end waitting
 
 - name: create cluster 
   command: >

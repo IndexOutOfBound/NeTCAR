@@ -34,3 +34,7 @@ couchdb:
   pass: admin
   coockie: unimelb-comp90024-group-61
   secret: mysecret
+
+TEMP_LOCATION: /tmp/openmpi
+FINAL_LOCATION: /opt/openmpi-1.10.2
+DEBUG_LOCATION: /tmp/openMPI-examples

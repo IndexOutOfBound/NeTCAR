@@ -1,0 +1,39 @@
+- name: generate_ssh_key
+  user:
+    name: "{{ mpi_user }}"
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+
+- name: copy MPI user's public key to share 
+  copy:
+    remote_src: yes
+    src: "~{{ mpi_user }}/.ssh/id_rsa.pub"
+    dest: "{{ shared_foler }}"
+
+
+- name: Read slave SSH host keys
+  shell: ssh-keyscan {{ item }}
+  with_items: "{{ groups['Worker'] }}"
+  register: keyscan_results
+  changed_when: False
+
+- name: add the ssh key into known_hosts
+  lineinfile:
+    dest: "~{{ mpi_user }}/.ssh/known_hosts"
+    line: "{{ item }}"
+    regexp: "^{{ item | regex_replace('^([^ ]+ [^ ]+) .*', '\\1') }}"
+    state: present
+    create: yes
+    owner: "{{ mpi_user }}"
+    group: "{{ mpi_user }}"
+  with_items: "{{ keyscan_results.results | map(attribute='stdout_lines') | list }}"
+
+- name: copy the mpi host file to remote server
+  copy:
+    src: "{{ mpi_hosts_file }}"
+    dest: "~{{ mpi_user }}"
+
+# mpirun --mca btl_tcp_if_include eth0 -host 172.26.38.97,localhost,172.26.38.108,172.26.38.29  hello-word
+# eval `ssh-agent`
+# ssh-add ~/.ssh/id_dsa

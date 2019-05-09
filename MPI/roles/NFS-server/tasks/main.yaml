@@ -1,0 +1,55 @@
+- name: install nfs server in master node
+  tags: 'nfs-server'
+  become: yes
+  apt: 
+    name: nfs-kernel-server
+    state: latest
+    install_recommends: no
+    
+
+- name: Checking folders
+  tags: 'nfs-server'
+  stat:
+    path: "{{ item }}"
+  register: directory_stats
+  with_items:
+    - "{{ shared_foler }}"
+
+- name: Create directory
+  tags: 'nfs-server'
+  file:
+    path: "{{ item.item }}"
+    recurse: yes
+    state: directory
+  when: item.stat.exists == false
+  with_items:
+    - "{{ directory_stats.results }}"
+
+- name: Create the exports file
+  tags: 'nfs-server'
+  become: yes
+  copy:
+    dest: "/etc/exports"
+    content: '{{shared_foler}} *(rw,sync,no_root_squash,no_subtree_check)'
+
+- name: apply the change 
+  become: yes
+  shell: exportfs -a
+
+
+- name: restart the server
+  become: yes
+  shell: service nfs-kernel-server restart
+
+  
+
+
+
+
+
+
+
+
+
+
+
