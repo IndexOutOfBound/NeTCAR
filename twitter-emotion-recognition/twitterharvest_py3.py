@@ -28,7 +28,7 @@ comm=MPI.COMM_WORLD
 size=comm.Get_size()
 rank=comm.Get_rank()
 #count=0
-db=couchdb.Server("http://jingjing:Jing1201@localhost:5984")
+db=couchdb.Server("http://admin:admin@localhost:5984")
 #http://admin:admin@localhost:5984
 if rank == 0:
 	print("i am rank 0")
