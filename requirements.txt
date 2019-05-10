@@ -12,12 +12,10 @@ Keras-Applications==1.0.7
 Keras-Preprocessing==1.0.9
 Markdown==3.1
 mock==3.0.5
-mpi4py==3.0.1
 numpy==1.16.0
 oauthlib==3.0.1
 pandas==0.24.1
 pbr==5.1.3
-powerline-status===2.7.dev9999-git.b-5d82d544f3366a214732aeb8f781d50ced38ceef-
 protobuf==3.7.1
 PySocks==1.6.8
 python-dateutil==2.8.0
@@ -35,7 +33,4 @@ Theano==1.0.4
 tweepy==3.7.0
 twitter==1.18.0
 urllib3==1.24.3
-virtualenv==16.4.3
-virtualenv-clone==0.5.1
-virtualenvwrapper==4.8.4
 Werkzeug==0.15.2
