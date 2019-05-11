@@ -4,7 +4,7 @@ mpi_user: ubuntu
 shared_foler: /home/{{mpi_user}}/mpi_data_share
 shared_master_public_key_file_path: "{{shared_foler}}/id_rsa.pub"
 
-mpi_script: hello-word.py
+mpi_script: twitterharvest_py3.py
 project_path: ~/cloud_deploy_script/
 
 requirements_file_name: "requirements.txt"
