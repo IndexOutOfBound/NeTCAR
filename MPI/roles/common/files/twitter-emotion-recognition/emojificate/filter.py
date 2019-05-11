@@ -28,3 +28,9 @@ def convert(char):
 
 def emojificate(line):
     return ''.join(convert(ch) for ch in line)
+
+
+if __name__ == "__main__":
+    line = "I 💜 emoji 😊"
+    print(emojificate(line))
+

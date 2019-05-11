@@ -29,11 +29,7 @@
     group: "{{ mpi_user }}"
   with_items: "{{ keyscan_results.results | map(attribute='stdout_lines') | list }}"
 
-- name: copy the mpi host file to remote server
+- name: copy the script used for collecting data to shared shared foler
   copy:
-    src: "{{ mpi_hosts_file }}"
-    dest: "~{{ mpi_user }}"
-
-# mpirun --mca btl_tcp_if_include eth0 -host 172.26.38.97,localhost,172.26.38.108,172.26.38.29  hello-word
-# eval `ssh-agent`
-# ssh-add ~/.ssh/id_dsa
+    src: '{{haverst_script_path}}'
+    dest: '{{shared_foler}}'

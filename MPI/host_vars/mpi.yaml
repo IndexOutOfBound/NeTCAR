@@ -4,8 +4,10 @@ mpi_user: ubuntu
 shared_foler: /home/{{mpi_user}}/mpi_data_share
 shared_master_public_key_file_path: "{{shared_foler}}/id_rsa.pub"
 
-mpi_hosts_file: /Users/weikai/Desktop/cloud_deploy_script/MPI/roles/manager/files/hosts
-
 mpi_script: hello-word.py
 
-mpi_script_path: /Users/weikai/Desktop/cloud_deploy_script/MPI/roles/run-script/files/{{mpi_script}}
+file_path: ~/cloud_deploy_script/MPI/roles/common/files
+
+requirements_file_name: "requirements.txt"
+requirements_path: "{{file_path}}/{{requirements_file_name}}"
+haverst_script_path: "{{file_path}}/twitter-emotion-recognition"
