@@ -153,7 +153,14 @@ def searchUserHistory(user):
 				doc["location"]=city[0]
 			if(city[1] in capitalCity):
 				doc["location"]=city[1]
-
+			
+			create=[]
+			create=j["created_at"].split()
+			doc["created_hour"]=create[3].split(":")[0]
+			doc["created_min"]=create[3].split(":")[1]
+			doc["created_sec"]=create[3].split(":")[2]
+			doc["day"]=create[0]
+			
 			if(doc["location"] is not None and j["lang"]=="en" and doc["emotion"] is not None):
 				
 				doc["_id"]=str(j["id"])
