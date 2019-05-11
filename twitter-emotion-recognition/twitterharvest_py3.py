@@ -14,6 +14,7 @@ import subprocess
 from mpi4py import MPI
 import sys
 
+from emojificate.filter import emojificate
 from emotion_predictor import EmotionPredictor
 from PreprocessTweet import preprocess_tweet
 import re
@@ -87,8 +88,7 @@ capitalCity=["Melbourne","Sydney","Perth","Brisbane","Adelaide"] #5 cities
 
 def emoji_mapper(tweet):
     tweet = tweet.replace('\"', ' ')
-    command = 'python3 -m emojificate \"{text}\"'.format(text=tweet.encode('utf-8'))
-    returned_text = subprocess.check_output(command, shell=True)
+    returned_text = emojificate(tweet)
 
     emojis = re.findall(r'<img.*?>', str(returned_text))
     if emojis:
