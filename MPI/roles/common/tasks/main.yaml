@@ -1,8 +1,24 @@
+
+- name: Install openmpi 
+  tags: 'MPI'
+  become: yes
+  apt:
+    name: [ 'openmpi-bin', 'openmpi-doc', 'openmpi-common']
+    state: present
+
+- name: change the default version of python | step 1
+  become: yes
+  shell: sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 2
+
+- name: change the default version of python | step 1
+  become: yes
+  shell: sudo update-alternatives --config python
+
 - name: install required package
   tags: 'MPI'
   become: yes
   apt:
-    name: ['build-essential',  'python-dev', 'python-mpi4py', 'python3-mpi4py']
+    name: ['build-essential',  'python-dev', 'python-mpi4py', 'python3-mpi4py', 'python3-pip']
     state: latest
     install_recommends: no
     update_cache: yes
@@ -15,11 +31,12 @@
     insertafter: 'EOF'
     state: present
 
-- name: Install openmpi 
-  tags: 'MPI'
-  become: yes
-  apt:
-    name: [ 'openmpi-bin', 'openmpi-doc', 'openmpi-common']
-    state: present
+- name: copy the requirements file to node
+  copy:
+    src: '{{mpi_script_path}}'
+    dest: ~
 
-
+- name: install dependencies
+  pip:
+    requirements: '{{shared_foler}}'/requirements.txt
+    executable: pip-3.3

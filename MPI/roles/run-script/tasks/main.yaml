@@ -10,11 +10,6 @@
   with_items:
     "{{groups['All']}}"
 
-- name: copy the script to nfs server
-  copy:
-    src: '{{mpi_script_path}}'
-    dest: '{{shared_foler}}'
-
 - name: run the script
   shell: >
      mpirun --mca btl_tcp_if_include eth0 -hostfile {{shared_foler}}/hostfile {{shared_foler}}/{{mpi_script}}
