@@ -11,9 +11,9 @@
 
 # - name: run the script
 #   shell: >
-#      mpirun --mca btl_tcp_if_include eth0 -hostfile {{shared_foler}}/hostfile {{shared_foler}}/{{mpi_script}}
+#      nohup mpirun --mca btl_tcp_if_include eth0 -hostfile {{shared_foler}}/hostfile {{shared_foler}}/{{mpi_script}}
 #   register: output
   
 
-- debug:
-    msg: '{{output.stdout}}'
+# - debug:
+#     msg: '{{output.stdout}}'

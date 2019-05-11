@@ -5,9 +5,9 @@ shared_foler: /home/{{mpi_user}}/mpi_data_share
 shared_master_public_key_file_path: "{{shared_foler}}/id_rsa.pub"
 
 mpi_script: hello-word.py
-
-file_path: ~/cloud_deploy_script/MPI/roles/common/files
+project_path: ~/cloud_deploy_script/
 
 requirements_file_name: "requirements.txt"
-requirements_path: "{{file_path}}/{{requirements_file_name}}"
-haverst_script_path: "{{file_path}}/twitter-emotion-recognition"
+haverst_script_name: "twitter-emotion-recognition"
+requirements_path: "{{project_path}}/{{requirements_file_name}}"
+haverst_script_path: "{{project_path}}/{{haverst_script_name}}"
