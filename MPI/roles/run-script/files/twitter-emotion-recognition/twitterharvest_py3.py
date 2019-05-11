@@ -31,7 +31,6 @@ rank=comm.Get_rank()
 db=couchdb.Server("http://admin:admin@localhost:5984")
 #http://admin:admin@localhost:5984
 if rank == 0:
-	print("i am rank 0")
 	try:
 		database=db["twitter"]
 		#print(len(database))
@@ -45,7 +44,6 @@ if rank == 0:
 	#database=db["twitter"]
 	#coordinate=[138.4421, -35.3490, 138.7832, -34.6481 ] # canberra
 if rank == 1:
-	print("i am rank 1")
 	consumer_key= 'VoOUcfsuU2Xw74Dp6OmdVaAx5'
 	consumer_secret='t1OVXZM4VXcdDArFykv7uDx65GOutpD9QeV3VMKXplSpYUvRsq'
 	access_token='1354151035-fUiaFz46uoToUQC3JwFJLTt7O7QshSHSqctAOEs'
@@ -65,7 +63,7 @@ if rank == 3:
 	consumer_secret='kXSzoVBEU3bnFweWHE624NPn3T7GrGilwfbm1EBCzqR1CAYYCl'
 	access_token='1354151035-rHMuSXWGSWDV6XPlOLIhtK3lKueMCXPzOXtse6G'
 	access_token_secret='3AkzeTCPcVcqT5cDwndcjpN9nBhmHB5vMuQLZhjQYjfOd'
-	coordinate=[147.2825, -42.8321, 147.3073, -42.8139,148.9960, -35.4799, 149.3993, -35.1244,144.5937, -38.4338, 145.5125, -37.5112] # Hobart + Canberra + Brisbane
+	coordinate=[144.5937, -38.4338, 145.5125, -37.5112] # Brisbane
 	#database=db["twitter"]
 if(rank!=0):
 	while (True):
@@ -85,7 +83,7 @@ api=tweepy.API(auth1,wait_on_rate_limit=True,wait_on_rate_limit_notify=True)
 
 userlist=[]
 
-capitalCity=["Melbourne","Sydney","Canberra","Perth","Brisbane","Adelaide","Darwin"] #7 cities
+capitalCity=["Melbourne","Sydney","Perth","Brisbane","Adelaide"] #5 cities
 
 def emoji_mapper(tweet):
     tweet = tweet.replace('\"', ' ')
@@ -145,10 +143,10 @@ def searchUserHistory(user):
 					text = text.replace(strip_str, '')
 
 			location=j["place"]["full_name"]
-			print("begin to map")
+			#print("begin to map")
 			text_returned=emoji_mapper(text)
 			emotion = preprocess_tweet(text_returned, model)
-			print(text_returned)
+			#print(text_returned)
 			doc["emotion"]=emotion
 			city=location.split(",", 1)
 			if(city[0] in capitalCity):
@@ -156,12 +154,12 @@ def searchUserHistory(user):
 			if(city[1] in capitalCity):
 				doc["location"]=city[1]
 
-			if(doc["location"] is not None and j["lang"]=="en"):
-				#count+=1
+			if(doc["location"] is not None and j["lang"]=="en" and doc["emotion"] is not None):
+				
 				doc["_id"]=str(j["id"])
-				doc["text"]=text
+				doc["text"]=text_returned
 				print(doc)
-				#database.save(doc)
+				database.save(doc)
 
 
 		except BaseException as e:
@@ -188,8 +186,7 @@ while True:
 	for user in userlist:
 		searchUserHistory(user)
 		userlist.remove(user)
-		#if (int(len(database))>int(sys.argv[1])):
-		if((time.process_time()-starttime)>int(sys.argv[1])):
+		if (int(len(database))>int(sys.argv[1])):
 			exit()
 #print(count)
 exit()
@@ -197,7 +194,7 @@ exit()
 #144.5532, -38.2250, 145.5498, -37.5401 # melb y
 #150.6396, -34.1399, 151.3439, -33.5780 # sydney y
 #138.4421, -35.3490, 138.7832, -34.6481 # Adelaide y
-#147.2825, -42.8321, 147.3073, -42.8139 # Hobart y
+
 #115.5607, -32.4824, 116.4151, -31.4552 # Perth y
-#148.9960, -35.4799, 149.3993, -35.1244 # Canberra y
+
 #144.5937, -38.4338, 145.5125, -37.5112 # Brisbane y
