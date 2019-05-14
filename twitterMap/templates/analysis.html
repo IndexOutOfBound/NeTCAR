@@ -1,0 +1,429 @@
+{% load staticfiles  %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Analysis</title>
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* top navigation bar */
+            /* Add a black background color to the top navigation */
+            .topnav {
+                background-color: #333;
+                overflow: hidden;
+                display: flex;
+                justify-content: space-around;
+            }
+
+            /* Style the links inside the navigation bar */
+            .topnav a {
+                float: left;
+                color: #f2f2f2;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 17px;
+            }
+
+            /* Change the color of links on hover */
+            .topnav a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+            /* Add a color to the active/current link */
+            .topnav a.active {
+                background-color: #b7b7b7;
+                color: white;
+            }
+
+            /* graphs */
+            /* angry */
+            #angryGraph {
+                border: 2px solid red;
+            }
+
+            #angryDescription {
+                {#position: absolute;#}
+                {#z-index: 1;#}
+                {#background: #fcd1a6;#}
+                {#text-align: center;#}
+                {#width:25%;#}
+                {#height: 25%;#}
+                {#left:5%;#}
+                {#top:10%;#}
+            }
+
+            /* daily */
+            #dailyGraph {
+                border: 2px solid green;
+                height: 50%;
+                width: 45%;
+                float: left;
+                /* up right down left */
+                margin: 10px 10px 10px 30px;
+            }
+
+            #dailyDescription {
+                border: 2px solid green;
+                height: 50%;
+                width: 45%;
+                float: right;
+                margin: 10px 30px 10px 10px;
+                text-align: center;
+            }
+
+             /* hourly */
+            #hourlyGraph {
+                border: 2px solid yellow;
+                height: 50%;
+                width: 45%;
+                float: right;
+                /* up right down left */
+                margin: 10px 30px 10px 10px;
+            }
+
+            #hourlyDescription {
+                border: 2px solid yellow;
+                height: 50%;
+                width: 45%;
+                float: left;
+                margin: 10px 10px 10px 30px;
+                text-align: center;
+            }
+
+             /* correlation */
+            #correlationGraph {
+                border: 2px solid blue;
+                height: 50%;
+                width: 45%;
+                float: left;
+                /* up right down left */
+                margin: 10px 10px 10px 30px;
+            }
+
+            #correlationDescription {
+                border: 2px solid blue;
+                height: 50%;
+                width: 45%;
+                float: right;
+                margin: 10px 30px 10px 10px;
+                text-align: center;
+            }
+
+            #day {
+                border: 2px solid purple;
+                height: 50%;
+                width: 45%;
+                float: left;
+                /* up right down left */
+                margin: 10px 10px 10px 30px;
+            }
+
+            #day img {
+                height: 100%;
+                width: 100%;
+            }
+
+            #dayDescription {
+                border: 2px solid purple;
+                height: 50%;
+                width: 45%;
+                float: right;
+                margin: 10px 30px 10px 10px;
+                text-align: center;
+            }
+
+            #hour {
+                border: 2px solid cadetblue;
+                height: 50%;
+                width: 45%;
+                float: left;
+                /* up right down left */
+                margin: 10px 10px 10px 30px;
+            }
+
+            #hour img {
+                height: 100%;
+                width: 100%;
+            }
+
+            #hourDescription {
+                border: 2px solid cadetblue;
+                height: 50%;
+                width: 45%;
+                float: right;
+                margin: 10px 30px 10px 10px;
+                text-align: center;
+            }
+
+        </style>
+        
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+        <script src="{% static 'liquidFillGauge.js' %}" language="JavaScript"></script>
+    </head>
+    <body>
+        <!--
+           top navigation bar here
+        -->
+
+        <div class="topnav">
+            <a href="{% url 'homePage' %}">Home Page</a>
+            <a href="{% url 'map' %}">Map</a>
+            <a class="active" href="{% url 'analysis' %}">Analysis</a>
+        </div>
+
+        <!--
+           graphs here
+        -->
+
+        <div id="angryGraph">
+            <svg id="fillgauge1" width="97%" height="250" ></svg>
+            <svg id="fillgauge2" width="19%" height="200" ></svg>
+            <svg id="fillgauge3" width="19%" height="200" ></svg>
+            <svg id="fillgauge4" width="19%" height="200" ></svg>
+            <svg id="fillgauge5" width="19%" height="200" ></svg>
+            <svg id="fillgauge6" width="19%" height="200" ></svg>
+
+            <div id="angryDescription"></div>
+        </div>
+
+
+        <div id="dailyGraph"></div>
+        <div id="dailyDescription">
+            <br>
+            <h3>
+                <u><b>Days vs percentage of wrathful tweet of the day</b></u>
+            </h3>
+            <br>
+            <h3>
+                We are interested in finding the emotion of tweets change of a particular city within a week. The vertical axis represents the percentage of wrathful tweet over the total number of tweets of a day. The trend of different city is represented by different color.
+            </h3>
+            <br>
+        </div>
+
+        <div id="hourlyGraph"></div>
+        <div id="hourlyDescription">
+            <br>
+            <h3>
+                <u><b>Hours vs percentage of wrathful tweet of a particular hour</b></u>
+            </h3>
+            <br>
+            <h3>
+                When looking deep into tweets in each city, an analysis is done by calculating the percentage of wrathful tweet in each hour. The graph indicates wrathful emotion changes as time goes in a day. The trend of different city is represented by different color.
+            </h3>
+            <br>
+        </div>
+
+        <div id="correlationGraph"></div>
+        <div id="correlationDescription">
+            <br>
+            <h3>
+                In order to verify the rationality of the data, compute the correlation between two variables: regional offender rates and anger levels for ﬁve main cities using R.
+            </h3>
+            <br>
+            <h3>
+                 As shown in the picture, there is a roughly positive correlation between two variables, which means the city that has higher anger level are more possible to have a higher offender rate. The correlation computed is 0.776, the positive value is approached to 1, which means the relation is a roughly strong correlation.
+            </h3>
+            <br>
+        </div>
+
+        <div id="dayDescription">
+            <br>
+            <h3>
+                The result of percentage of wrathful tweet over a week is quite interesting
+                and reflects that our hypothesis of life of Australians is not accurate.
+                From the graph, the percentage of wrathful tweet each day in a week is
+                about at the average of 2.5% except for Monday which is 1.5% higher
+                than average.
+            </h3>
+            <br>
+        </div>
+        <div id="day">
+            <img src="{% static 'day.png' %}" alt="day" />
+        </div>
+
+
+        <div id="hour">
+            <img src="{% static 'hour.png' %}" alt="hour" />
+        </div>
+        <div id="hourDescription">
+            <br>
+            <h3>
+                The percentage of wrathful tweets over a day is roughly about 2.75%,
+                however it is quite beyond our expectation.9 o’clock in the morning and 5 o’clock in the evening are two periods with high percentage of wrathful tweets
+            </h3>
+            <br>
+        </div>
+
+        <script>
+            var dailyCityData = {{ DictDaily | safe }};
+            
+            var hourlyCityData = {{ DictHourly | safe }};
+
+            var cityDataRate = {{ DictRate | safe }};
+
+            var paopaoDate = {{ DictPaoPao | safe }};
+
+
+                var gauge1 = loadLiquidFillGauge("fillgauge1", paopaoDate[0]); //改这个数字的参数就可以了
+                var config1 = liquidFillGaugeDefaultSettings();
+                config1.cityText="Melb";
+                config1.circleColor = "#FF7777";
+                config1.textColor = "#FF4444";
+                config1.waveTextColor = "#FFAAAA";
+                config1.waveColor = "#FFDDDD";
+                config1.circleThickness = 0.2;
+                config1.textVertPosition = 0.6;
+                config1.waveAnimateTime =1000;
+                var gauge2= loadLiquidFillGauge("fillgauge2", paopaoDate[1], config1);
+                var config2 = liquidFillGaugeDefaultSettings();
+                config2.cityText="Sydney";
+                config2.circleColor = "#D4AB6A";
+                config2.textColor = "#553300";
+                config2.waveTextColor = "#805615";
+                config2.waveColor = "#AA7D39";
+                config2.circleThickness = 0.1;
+                config2.circleFillGap = 0.2;
+                config2.waveAnimateTime = 2000;
+                config2.textVertPosition = 0.7;
+                config2.waveHeight = 0.3;
+                config2.waveCount = 1;
+                var gauge3 = loadLiquidFillGauge("fillgauge3", paopaoDate[2], config2);
+                var config3 = liquidFillGaugeDefaultSettings();
+                config3.cityText="Brisbane";
+                config3.circleColor = "#f48342";
+                config3.textColor = "#e56820";
+                config3.waveColor = "#f4945d"
+                config3.waveTextColor = "#e56820";
+                config3.waveAnimateTime = 5000;
+                config3.waveHeight = 0.15;
+                config3.waveOffset = 0.25;
+                config3.valueCountUp = true;
+                config3.textVertPosition = 0.6;
+
+                var gauge4 = loadLiquidFillGauge("fillgauge4", paopaoDate[3], config3);
+                var config4 = liquidFillGaugeDefaultSettings();
+                config4.cityText="Perth";
+                config4.circleThickness = 0.10;
+                config4.circleColor = "#808015";
+                config4.textColor = "#555500";
+                config4.waveTextColor = "#FFFFAA";
+                config4.waveColor = "#AAAA39";
+                config4.waveAnimateTime = 1000;
+                config4.waveHeight = 0.05;
+                config4.waveOffset = 0.25;
+                config4.waveCount = 3;
+                config4.textVertPosition = 0.6;
+                var gauge5 = loadLiquidFillGauge("fillgauge5", paopaoDate[4], config4);
+                var config5 = liquidFillGaugeDefaultSettings();
+                config5.cityText="Adelaide";
+                config5.circleColor = "#6DA398";
+                config5.textColor = "#0E5144";
+                config5.waveTextColor = "#6DA398";
+                config5.waveColor = "#246D5F";
+                config5.waveAnimateTime = 1000;
+                config5.waveCount = 2;
+                config5.waveOffset = 0.25;
+                config5.textSize = 1.0;
+                config5.textVertPosition = 0.6;
+                var gauge6 = loadLiquidFillGauge("fillgauge6", paopaoDate[5], config5);
+
+                function NewValue(){
+                    if(Math.random() > .5){
+                        return Math.round(Math.random()*100);
+                    } else {
+                        return (Math.random()*100).toFixed(1);
+                    }
+                }
+
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.load('current', {'packages':['line']});
+            google.charts.setOnLoadCallback(drawChartCorrelation);
+            google.charts.setOnLoadCallback(drawChartHourly);
+            google.charts.setOnLoadCallback(drawChartDaily);
+
+
+            function drawChartDaily() {
+
+                var data = new google.visualization.DataTable();
+
+                data.addColumn('string', 'Week');
+                data.addColumn('number', 'Adelaide');
+                data.addColumn('number', 'Brisbane');
+                data.addColumn('number', 'Melbourne');
+                data.addColumn('number', 'Perth');
+                data.addColumn('number', 'Sydney');
+
+                data.addRows(dailyCityData);
+
+                var options = {
+                    chart: {
+                        title: 'daily angry rate',
+                        subtitle: 'five capital cities'
+                    },
+                };
+
+                var chart = new google.charts.Line(document.getElementById('dailyGraph'));
+
+                chart.draw(data, google.charts.Line.convertOptions(options));
+            }
+
+            function drawChartHourly() {
+
+                var data = new google.visualization.DataTable();
+
+                data.addColumn('string', 'Hour');
+                data.addColumn('number', 'Adelaide');
+                data.addColumn('number', 'Brisbane');
+                data.addColumn('number', 'Melbourne');
+                data.addColumn('number', 'Perth');
+                data.addColumn('number', 'Sydney');
+
+                data.addRows(hourlyCityData);
+
+                var options = {
+                    chart: {
+                        title: 'hourly angry rate',
+                        subtitle: 'five capital cities'
+                    },
+                };
+
+                var chart = new google.charts.Line(document.getElementById('hourlyGraph'));
+
+                chart.draw(data, google.charts.Line.convertOptions(options));
+            }
+
+
+            function drawChartCorrelation() {
+
+                var prePart = [['percentage of wrathful tweets', 'offender rate']];
+                var inputData = prePart.concat(cityDataRate);
+
+                var data = google.visualization.arrayToDataTable(inputData);
+
+                var options = {
+                    title: 'offender rate VS percentage of wrathful tweets',
+                    hAxis: {title: 'percentage of wrathful tweets'},
+                    vAxis: {
+                        title: 'offender rate',
+                        viewWindow: {min: 0.0025}
+                    },
+                    legend: 'none',
+                    trendlines: { 0: {} }    // Draw a trendline for data series 0.
+                };
+
+                var chart = new google.visualization.ScatterChart(document.getElementById('correlationGraph'));
+                chart.draw(data, options);
+            }
+
+        </script>
+
+    </body>
+</html>

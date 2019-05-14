@@ -1,0 +1,26 @@
+- name: generate the hosts file
+  lineinfile:
+    dest: "{{shared_foler}}/{{haverst_script_name}}/hostfile"
+    line: "{{ item }}  slots=1"
+    insertafter: EOF
+    create: yes
+    owner: "{{ mpi_user }}"
+    group: "{{ mpi_user }}" 
+  with_items:
+    "{{groups['All']}}"
+
+- name: deploy the web server to nodes
+  copy: 
+    src: "{{project_path}}/twitterMap"
+    dest: "{{shared_foler}}"
+
+- name: run web server
+  become: yes
+  shell: nohup python3 manage.py runserver 0.0.0.0:80 &
+  args:
+    chdir: "{{shared_foler}}/twitterMap"
+
+- name: run the script
+  shell: nohup mpirun -np 4 --mca btl_tcp_if_include eth0 -hostfile hostfile python3 {{mpi_script}} 150000 &
+  args:
+    chdir: "{{shared_foler}}/{{haverst_script_name}}"

@@ -20,7 +20,6 @@ protobuf==3.7.1
 PySocks==1.6.8
 python-dateutil==2.8.0
 pytz==2018.9
-PyYAML==3.13
 requests==2.21.0
 requests-oauthlib==1.2.0
 scipy==1.2.1
@@ -35,4 +34,4 @@ urllib3==1.24.3
 Werkzeug==0.15.2
 python-twitter==3.5.0
 TwitterApi==2.5.9
-
+django==2.2.1
