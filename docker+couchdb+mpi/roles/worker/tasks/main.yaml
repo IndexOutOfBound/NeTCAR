@@ -1,0 +1,18 @@
+
+- name: Read Master's public key from NFS share
+  slurp:
+    src: "{{ shared_master_public_key_file_path }}"
+  register: public_key
+
+- name: Ensure Master's public key is added as authorized key for connecting as MPI user
+  authorized_key:
+    user: "{{ mpi_user }}"
+    state: present
+    key: "{{ public_key['content'] | b64decode }}"
+
+# Module above will create authorized_keys file as root user
+- name: Ensure MPI user can access its authorized_keys file
+  file:
+    path: "~{{ mpi_user }}/.ssh/authorized_keys"
+    owner: "{{ mpi_user }}"
+    group: "{{ mpi_user }}"

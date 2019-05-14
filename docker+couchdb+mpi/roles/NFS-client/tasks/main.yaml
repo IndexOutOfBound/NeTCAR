@@ -1,0 +1,30 @@
+- name: install nfs server in master node
+  tags: 'nfs-client'
+  become: yes
+  apt: 
+    name: nfs-common
+    state: latest
+    install_recommends: no
+
+- name: Checking folders
+  tags: 'nfs-client'
+  stat:
+    path: "{{ item }}"
+  register: directory_stats
+  with_items:
+    - "{{ shared_foler }}"
+
+- name: Create directory
+  tags: 'nfs-client'
+  file:
+    path: "{{ item.item }}"
+    recurse: yes
+    state: directory
+  when: item.stat.exists == false
+  with_items:
+    - "{{ directory_stats.results }}"
+
+- name: mount the shared directory
+  become: yes
+  tags: 'nfs-client'
+  shell: mount -t nfs {{groups['Manager'][0]}}:{{shared_foler}} {{shared_foler}}

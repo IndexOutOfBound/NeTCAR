@@ -1,0 +1,17 @@
+- name: generate the hosts file
+  lineinfile:
+    dest: "{{shared_foler}}/{{haverst_script_name}}/hosts"
+    line: "{{ item }}  slots=1"
+    insertafter: EOF
+    create: yes
+    owner: "{{ mpi_user }}"
+    group: "{{ mpi_user }}" 
+  with_items:
+    "{{groups['All']}}"
+
+- name: run the script
+  shell: >
+     nohup mpirun -np 4 --mca btl_tcp_if_include eth0 -hostfile hostfile python3 '{{mpi_script}}' 500000 &
+     chdir: '{{shared_foler}}/{{haverst_script_name}}'
+
+  # mpirun -np 4 --mca btl_tcp_if_include eth0 -hostfile hostfile python3 twitterharvest_py3.py 500

@@ -1,0 +1,27 @@
+# This playbook contains common handlers that can be called in "setup" tasks.
+
+
+- name: create the directory
+  become: yes
+  shell: mkdir -p /etc/systemd/system/docker.service.d
+
+- name: Copy the systemd drop-in directory to docker service
+  become: yes
+  copy:
+    dest: "{{ docker_proxy_remote }}"
+    content: "[Service]\nEnvironment=\"HTTP_PROXY=http://wwwproxy.unimelb.edu.au:8000\""
+  
+- name: Flush change
+  tags: 'proxy'
+  become: yes
+  command: systemctl daemon-reload
+
+- name: Start docker
+  tags: 'start'
+  become: yes
+  command: systemctl restart docker
+
+
+    
+
+    

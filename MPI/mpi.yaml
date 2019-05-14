@@ -1,0 +1,28 @@
+# - hosts: All
+#   vars_files:
+#     - host_vars/mpi.yaml  
+#   gather_facts: true
+#   roles:
+#     - role: common
+
+# - hosts: Manager
+#   vars_files:
+#     - host_vars/mpi.yaml 
+#   roles:
+#     - role: NFS-server
+#     - role: manager
+
+# - hosts: Worker 
+#   vars_files:
+#     - host_vars/mpi.yaml  
+#   gather_facts: true
+#   roles:
+#     - role: NFS-client
+#     - role: worker
+
+- hosts: Manager
+  vars_files:
+    - host_vars/mpi.yaml 
+  gather_facts: true
+  roles:
+    - role: run-script
