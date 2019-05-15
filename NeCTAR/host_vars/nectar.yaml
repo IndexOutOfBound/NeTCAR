@@ -53,7 +53,7 @@ instances:
     vol_name: vol-cloud-4
     vol_size: 60
 
-instance_image: 37788d15-12bd-488c-b15e-903d43eae051
+instance_image: afccf48a-9426-4618-86dc-0ceb636f0169
 instance_key_name: MacPro
 instance_flavor: uom.mse.2c9g
 instance_network: qh2-uom-internal

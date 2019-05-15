@@ -1,0 +1,35 @@
+- name: generate_ssh_key
+  user:
+    name: "{{ mpi_user }}"
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+
+- name: copy MPI user's public key to share 
+  copy:
+    remote_src: yes
+    src: "~{{ mpi_user }}/.ssh/id_rsa.pub"
+    dest: "{{ shared_foler }}"
+
+
+- name: Read slave SSH host keys
+  shell: ssh-keyscan {{ item }}
+  with_items: "{{ groups['Worker'] }}"
+  register: keyscan_results
+  changed_when: False
+
+- name: add the ssh key into known_hosts
+  lineinfile:
+    dest: "~{{ mpi_user }}/.ssh/known_hosts"
+    line: "{{ item }}"
+    regexp: "^{{ item | regex_replace('^([^ ]+ [^ ]+) .*', '\\1') }}"
+    state: present
+    create: yes
+    owner: "{{ mpi_user }}"
+    group: "{{ mpi_user }}"
+  with_items: "{{ keyscan_results.results | map(attribute='stdout_lines') | list }}"
+
+- name: copy the script used for collecting data to shared shared foler
+  copy:
+    src: '{{haverst_script_path}}'
+    dest: '{{shared_foler}}'

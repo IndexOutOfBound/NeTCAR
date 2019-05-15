@@ -1,9 +1,21 @@
 # - hosts: All
 #   vars_files:
+#     - host_vars/Docker.yaml  
+#   gather_facts: true
+#   roles:
+#     - role: docker-common
+#     - role: volumes
+#     - role: docker
+#     - role: start-docker
+#     - role: couchdb
+#     - role: docker-swarm
+
+# - hosts: All
+#   vars_files:
 #     - host_vars/mpi.yaml  
 #   gather_facts: true
 #   roles:
-#     - role: common
+#     - role: mpi-common
 
 # - hosts: Manager
 #   vars_files:
